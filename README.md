@@ -17,8 +17,12 @@
 ✔ 승률(Win Rate) 기반 공정한 평가 체계 구축
 
 ### 📌 프로젝트 시연 (예시)
-![alt text](assets/image.png)
-![alt text](assets/graph_winrate_comparison.png)
+<table>
+  <tr>
+    <td><img src="assets/image.png" width="350"></td>
+    <td><img src="assets/graph_winrate_comparison.png" width="350"></td>
+  </tr>
+</table>
 
 
 ## 🛠️ 설치 및 환경 설정
@@ -67,7 +71,17 @@ Top-Gun-Maverick/
 ├── test.py
 └── evaluation.py
 ```
+-------------
+### 파일 설명 
+코드 보실 때 아래 순서대로 파일을 들어가서 보시면 비교적 이해하시기 편할 것 같습니다.
+`dogfight_env.py` $\to$ `train.py`$\to$ `test.py` $\to$ `evaluation.py`
+- **`dogfight_env.py`**: OpenAI Gym 인터페이스를 기반으로 구축된 2D 공중전 시뮬레이션 환경 및 물리 엔진/보상 함수 로직.
+- **`train.py`**: 알고리즘/네트워크/난이도를 설정하여 에이전트 학습을 수행하고, Checkpoints 및 Reward 저장
+- **`test.py`**: 학습된 모델을 로드하여 렌더링을 통해 에이전트의 기동을 실시간으로 시각화 및 검증.
+- **`evaluation.py`**: 고정된 Random Seed와 반복 에피소드를 통해 승률(Win Rate) 등의 성능 지표를 정량적으로 측정하고 Reward 및 Win Rate 시각화
+
 -----------
+
 ### 1. **에이전트 학습** (`train.py`)
 
 `train.py` 파일 하나로 **새로운 학습** 과 **이어서 학습하기** 를 모두 수행할 수 있습니다.
