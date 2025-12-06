@@ -17,8 +17,8 @@
 ✔ 승률(Win Rate) 기반 공정한 평가 체계 구축
 
 ### 📌 프로젝트 시연 (예시)
-![alt text](assets\image.png)
-![alt text](assets\graph_winrate_comparison.png)
+![alt text](assets/image.png)
+![alt text](assets/graph_winrate_comparison.png)
 
 
 ## 🛠️ 설치 및 환경 설정
