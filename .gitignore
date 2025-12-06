@@ -1,0 +1,15 @@
+# 로그, 학습 결과, 체크포인트 제외
+logs/
+results/
+
+# 캐시 및 임시 파일 제외
+__pycache__/
+*.pyc
+
+# 가상환경 폴더 제외
+venv/
+env/
+.venv/
+
+# 시스템 파일 제외
+.DS_Store
