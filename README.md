@@ -21,7 +21,7 @@
 ### 📌 프로젝트 시연 (예시)
 <table>
   <tr>
-    <td><img src="assets/image.png" width="350"></td>
+    <td><img src="assets/simulation.png" width="350"></td>
     <td><img src="assets/graph_winrate_comparison.png" width="450"></td>
   </tr>
 </table>
@@ -33,8 +33,8 @@
 
 1. **프로젝트 다운로드** 
 ```bash
-git clone https://github.com/YourUsername/YourProjectName.git
-cd YourProjectName
+git clone https://github.com/minseonghan/Top-Gun-Maverick.git
+cd Top-Gun-Maverick
 ```
 
 2. **라이브러리 설치** (가상환경 추천에서 진행하기를 추천합니다.)
@@ -68,6 +68,7 @@ Top-Gun-Maverick/
 
 ### 🎮 주요 파일 설명 
 코드 보실 때 아래 순서대로 파일을 들어가서 보시면 비교적 이해하시기 편할 것 같습니다.
+
 `dogfight_env.py` $\to$ `train.py`$\to$ `test.py` $\to$ `evaluation.py`
 - **`dogfight_env.py`**: OpenAI Gym 인터페이스를 기반으로 구축된 2D 공중전 시뮬레이션 환경 및 물리 엔진/보상 함수 로직.
 - **`train.py`**: 알고리즘/네트워크/난이도를 설정하여 에이전트 학습을 수행하고, Checkpoints 및 Reward 저장
@@ -79,14 +80,19 @@ Top-Gun-Maverick/
 ## 🚀 사용 방법
 이 프로젝트는 **학습(Train)**, **시각화(Test)**, **평가(Evaluation)** 의 3단계 파이프라인으로 구성되어 있습니다.
 
-### ⚠️ 필수 확인 사항  
+### --- ⚠️ 필수 확인 사항  ---- 필수로 확인해주세요!!!!!!!!!!!!!!!!!!!!!!
 - **권장 학습량**: 유의미한 전술 기동을 학습하기 위해서는 200만 Step 이상의 학습을 권장합니다. (최소 100만 Step 이상)
 
-- **멀티 프로세싱** : `train.py`는 빠른 데이터 수집을 위해 CPU 병렬 처리를 지원합니다. 본인의 CPU 코어 수에 맞춰 `--n_envs` 옵션을 조절하세요. (권장: 전체 코어 수 - 10)
+- **멀티 프로세싱** : `train.py`는 빠른 데이터 수집을 위해 CPU 병렬 처리를 지원합니다. 본인의 CPU 코어 수에 맞춰 `--n_envs` 옵션을 조절하세요. (권장: 전체 코어 수 - 10, 설정하지 않으면 기본 1로 설정됩니다.)
 
 - **Checkpoints 및 실험 결과 저장소**: https://drive.google.com/drive/folders/1AXFPK7xQpnUrl42ke9HL9YrVziXlabm1?usp=sharing
-    - 보고서에서 언급된 실험들의 Checkpoints가 존재합니다. 다운 받아서 `test` 및 `evaluation` 가능합니다.
-    - 보고서에서 언급된 실험들의 실험 결과(Reward, Win Rate) 또한 존재합니다. 
+    - 보고서에서 언급된 실험들의 Checkpoints가 모두 구글드라이브 저장소에 존재합니다. 
+    - 전체 혹은 필요한 Checkpoint 파일만 다운 받아서 `test` 및 `evaluation` 가능합니다.
+    - 일부 Checkpoint는 git clone을 하게 되면 함께 다운받을 수 있게끔 하였습니다.
+    - git clone을 통해 다운 받은 Checkpoint로 `test`는 할 수 있으나 `evaluation`을 하기에는 적합하지 않습니다. 
+      - `evaluation`을 통해 **프로젝트 시연**같은 그래프를 얻기 위해서는 20000 step마다 저장된 checkpoints 모두 필요합니다.
+      - 때문에 이를 위해서는 구글드라이브 저장소에서 Checkpoints를 다운받아야합니다.
+
 
 ### 1. **에이전트 학습** (`train.py`)
 
@@ -107,28 +113,21 @@ Top-Gun-Maverick/
 
 `--load_model`: 이어서 학습할 모델 경로 (없으면 새로 시작)
 
-**A. 처음부터 학습하기**
+**학습하기**
 ```bash
 # 예시: HARD 모드, 200만 스텝, SAC 알고리즘, CPU 10개 사용
-python train.py --difficulty HARD --steps 2000000 --seed 1 --algo SAC --n_envs 10 --exp_name dogfight_sac_128_hard_seed1 --units 128
+python train.py --difficulty HARD --steps 2000000 --seed 2 --algo SAC --n_envs 10 --exp_name dogfight_sac_128_hard_seed2 --units 128
 ```
 
-**B. 학습 이어서 하기**
-기존 모델을 불러와서 추가로 학습하거나 난이도를 바꿔서 학습합니다.
-```bash
-# 예시: EASY 모델을 불러와서 HARD 모드로 100만 스텝 추가 학습
-python train.py --difficulty HARD --steps 1000000 --seed 1 --algo SAC --n_envs 10 --units 128 \
---exp_name dogfight_sac_curriculum_seed1 \
---load_model ./logs/dogfight_sac_128_easy_seed1/checkpoints/dogfight_pilot_easy.zip
-```
+
 -------------
 ### 2. **시뮬레이션 시각화** (`test.py`)
 학습된 모델이 실제로 어떻게 비행하는지 눈으로 확인합니다. (render 모드 활성화)
 ```bash
 # 기본 사용법
-python test.py --algo SAC --difficulty HARD --model_path ./logs/dogfight_sac_128_hard_seed1/checkpoints/dogfight_pilot_hard.zip --episodes 3
+python test.py --algo SAC --difficulty HARD --model_path ./logs/dogfight_sac_128_hard_seed1/checkpoints/dogfight_pilot_hard.zip --episodes 5
 ```
-
+---------
 ### 3. **성능 평가 및 그래프 분석** (`evaluation.py`)
 여러 모델의 학습 로그(`monitor.csv`)와 체크포인트 승률을 비교 분석하여 그래프를 그립니다.
 
@@ -140,7 +139,7 @@ python test.py --algo SAC --difficulty HARD --model_path ./logs/dogfight_sac_128
 experiments = {
         "SAC_Easy_128": ["logs/dogfight_sac_128_easy_seed1", "logs/dogfight_sac_128_easy_seed2", "logs/dogfight_sac_128_easy_seed3"],
         "SAC_Hard_128": ["logs/dogfight_sac_128_hard_seed1", "logs/dogfight_sac_128_hard_seed2", "logs/dogfight_sac_128_hard_seed3"],
-        "SAC_Curriculum_V1_128": ["logs/dogfight_sac_128_curriculum_v1_seed1", "logs/dogfight_sac_128_curriculum_v1_seed2", "logs/dogfight_sac_128_curriculum_v1_seed3"]
+        "SAC_Curriculum_V2_128": ["logs/dogfight_sac_128_curriculum_v2_seed1", "logs/dogfight_sac_128_curriculum_v2_seed2", "logs/dogfight_sac_128_curriculum_v2_seed3"]
 }
 ```
 - 2. 평가 스크립트 실행:
@@ -171,3 +170,16 @@ elif self.difficulty == "EASY":
     self.LOCK_ANGLE = np.deg2rad(40) # 공격 각도 대폭 확대
     prob_start = 0.95 # 거의 항상 뒤에서 시작
 ```
+
+
+<br>
+ 
+## 📚 코드 및 보고서에 등장하는 헷갈리는 용어 
+<img src="assets/AA-ATA%20Fig.png" width="450px">
+
+
+`보고서 7page`
+- **Heading**: 기수의 각도 (향하고 있는 방향의 절대적 각도)
+- **ATA(Antenna Train Angle)**: 내 기축선과 적기 사이의 각도 (Lock-on 조준 여부 판단)
+- **AA(Aspect Angle)**: 적기의 꼬리 방향과 나 사이의 각도 (내가 적의 뒤에 있는지 판단)
+- **핵심 목표**: ATA를 줄여 조준(공격) 가능하도록 하고, AA를 줄여 꼬리를 잡은 상태(공격에 유리하며 적에게 공격을 당하지 않는 위치)를 유지하는 것

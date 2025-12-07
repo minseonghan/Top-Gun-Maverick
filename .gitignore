@@ -1,6 +1,5 @@
 # 로그, 학습 결과, 체크포인트 제외
-logs/
-results/
+logs2/
 
 # 캐시 및 임시 파일 제외
 __pycache__/
