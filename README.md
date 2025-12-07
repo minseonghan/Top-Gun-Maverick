@@ -88,14 +88,15 @@ Top-Gun-Maverick/
 - **권장 학습량**: 유의미한 전술 기동을 학습하기 위해서는 200만 Step 이상의 학습을 권장합니다. (최소 100만 Step 이상)
 
 - **멀티 프로세싱** : `train.py`는 빠른 데이터 수집을 위해 CPU 병렬 처리를 지원합니다. 본인의 CPU 코어 수에 맞춰 `--n_envs` 옵션을 조절하세요. (권장: 전체 코어 수 - 10, 설정하지 않으면 기본 1로 설정됩니다.)
+  - Ctrl + Shift + ESC (작업 관리자) $\to$ 성능 클릭 $\to$ 사용 가능한 코어 개수 확인
 
-- **Checkpoints 및 실험 결과 저장소**: https://drive.google.com/drive/folders/1AXFPK7xQpnUrl42ke9HL9YrVziXlabm1?usp=sharing
-    - 보고서에서 언급된 실험들의 Checkpoints가 모두 구글드라이브 저장소에 존재합니다. 
+- **Checkpoints 및 실험 결과 저장 드라이브**: https://drive.google.com/drive/folders/1AXFPK7xQpnUrl42ke9HL9YrVziXlabm1?usp=sharing
+    - 보고서에서 언급된 실험들의 Checkpoints가 모두 구글드라이브에 존재합니다. 
     - 전체 혹은 필요한 Checkpoint 파일만 다운 받아서 `test` 및 `evaluation` 가능합니다.
     - 일부 Checkpoint는 git clone을 하게 되면 함께 다운받을 수 있게끔 하였습니다.
-    - git clone을 통해 다운 받은 Checkpoint로 `test`는 할 수 있으나 `evaluation`을 하기에는 적합하지 않습니다. 
+    - git clone을 통해 자동으로 다운 받은 Checkpoint로는 `test`는 할 수 있으나 `evaluation`을 하기에는 적합하지 않습니다. 
       - `evaluation`을 통해 **프로젝트 시연**같은 그래프를 얻기 위해서는 20000 step마다 저장된 checkpoints 모두 필요합니다.
-      - 때문에 이를 위해서는 구글드라이브 저장소에서 Checkpoints를 다운받아야합니다.
+      - 때문에 이를 위해서는 구글드라이브에서 Checkpoints를 다운받아야합니다.
 
 
 ### 1. **에이전트 학습** (`train.py`)
@@ -119,7 +120,7 @@ Top-Gun-Maverick/
 
 **학습하기**
 ```bash
-# 예시: HARD 모드, 200만 스텝, SAC 알고리즘, CPU 10개 사용
+# 예시: HARD 모드, 200만 스텝, SAC 알고리즘, CPU 10개 사용, 신경망유닛 128
 python train.py --difficulty HARD --steps 2000000 --seed 2 --algo SAC --n_envs 10 --units 128
 ```
 
@@ -128,12 +129,14 @@ python train.py --difficulty HARD --steps 2000000 --seed 2 --algo SAC --n_envs 1
 ### 2. **시뮬레이션 시각화** (`test.py`)
 학습된 모델이 실제로 어떻게 비행하는지 눈으로 확인합니다. (render 모드 활성화)
 ```bash
-# 기본 사용법
-python test.py --algo SAC --difficulty HARD --model_path ./logs/dogfight_sac_128_hard_seed1/checkpoints/dogfight_pilot_hard.zip --episodes 5
+# 예시: SAC로 학습된 모델 불러오기, HARD 모드, ./logs/dogfight_sac_256_hard_seed1/checkpoints/dogfight_pilot_hard.zip에 있는 모델 test, 5번의 에피소드 테스트
+python test.py --algo SAC --difficulty HARD --model_path ./logs/dogfight_sac_256_hard_seed1/checkpoints/dogfight_pilot_hard.zip --episodes 5
 ```
 ---------
 ### 3. **성능 평가 및 그래프 분석** (`evaluation.py`)
 여러 모델의 학습 로그(`monitor.csv`)와 체크포인트 승률을 비교 분석하여 그래프를 그립니다.
+#### ⚠️  필수 확인 사항 참고
+-  따로 학습하시지 않고 Evaluation 하기 위해서는 위에서 언급드린 구글 드라이브에서 Checkpoints들을 다운받아서 진행해야합니다.
 
 #### 사용방법
 - 1. `evaluation.py` 파일을 열어 상단의 `EVAL_CONFIG`의 딕셔너리에 하나의 체크포인트당 평가할 에피소드 수를 입력합니다. ("episodes": 50, 기본 설정 값은 50인데 오래 걸릴 수 있습니다.) 
