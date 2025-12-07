@@ -116,7 +116,7 @@ Top-Gun-Maverick/
 **학습하기**
 ```bash
 # 예시: HARD 모드, 200만 스텝, SAC 알고리즘, CPU 10개 사용
-python train.py --difficulty HARD --steps 2000000 --seed 2 --algo SAC --n_envs 10 --exp_name dogfight_sac_128_hard_seed2 --units 128
+python train.py --difficulty HARD --steps 2000000 --seed 2 --algo SAC --n_envs 10 --units 128
 ```
 
 
@@ -131,10 +131,13 @@ python test.py --algo SAC --difficulty HARD --model_path ./logs/dogfight_sac_128
 ### 3. **성능 평가 및 그래프 분석** (`evaluation.py`)
 여러 모델의 학습 로그(`monitor.csv`)와 체크포인트 승률을 비교 분석하여 그래프를 그립니다.
 
-**사용방법**
+#### 사용방법
 - 1. `evaluation.py` 파일을 열어 상단의 `EVAL_CONFIG`의 딕셔너리에 하나의 체크포인트당 평가할 에피소드 수를 입력합니다. ("episodes": 50, 기본 설정 값은 50인데 오래 걸릴 수 있습니다.) 
 - 2. `evaluation.py` 파일을 열어 상단의 `EVAL_CONFIG`의 딕셔너리에 평가하고 싶은 난이도를 입력합니다. ("difficulty": "EVAL_LV.1", "difficulty": "EVAL_LV.2" 중에 택 1)
-- 3. `evaluation.py` 파일을 열어 하단의 메인 함수 내의 `experiments` 딕셔너리에 비교하고 싶은 모델 경로를 입력합니다.
+- 3. `evaluation.py` 파일을 열어 하단의 **데이터 수집 모드**를 선택합니다. 
+  - `DO_REWARD_ANALYSIS = True`   $\to$  **Reward 시각화**
+  - `DO_WINRATE_ANALYSIS = True`  $\to$  **Win Rate 시각화** (시간 걸림)
+- 4. `evaluation.py` 파일을 열어 하단의 메인 함수 내의 `experiments` 딕셔너리에 비교하고 싶은 모델 경로를 입력합니다.
 ```bash
 experiments = {
         "SAC_Easy_128": ["logs/dogfight_sac_128_easy_seed1", "logs/dogfight_sac_128_easy_seed2", "logs/dogfight_sac_128_easy_seed3"],
@@ -142,12 +145,12 @@ experiments = {
         "SAC_Curriculum_V2_128": ["logs/dogfight_sac_128_curriculum_v2_seed1", "logs/dogfight_sac_128_curriculum_v2_seed2", "logs/dogfight_sac_128_curriculum_v2_seed3"]
 }
 ```
-- 2. 평가 스크립트 실행:
+- 5. 평가 스크립트 실행:
 ```bash
 python evaluation.py
 ```
 
-- 3. 실행 후 생성된 `graph_reward.png` (학습 곡선)와 `graph_winrate_png` (승률) 이미지를 확인합니다.
+- 6. 실행 후 생성된 `graph_reward.png` (학습 곡선)와 `graph_winrate_png` (승률) 이미지를 확인합니다.
 
 <br>
 
