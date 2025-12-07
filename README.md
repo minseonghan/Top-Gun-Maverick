@@ -39,13 +39,11 @@ cd Top-Gun-Maverick
 
 2. **라이브러리 설치** (가상환경 추천에서 진행하기를 추천합니다.)
 ```bash
-1. Conda 환경 생성 (추천)
-# 가상환경 생성
+# 1. Conda 가상 환경 생성 (추천)
 conda create -n dogfight python=3.11 -y
 conda activate dogfight
 
-2. 라이브러리 및 프레임워크 설치
-# 기본 라이브러리 및 RL 프레임워크
+# 2. 라이브러리 및 프레임워크 설치
 pip install gymnasium numpy matplotlib
 pip install stable_baselines3
 
